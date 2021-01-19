@@ -14,6 +14,7 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 			try {
 				fetch(`${book["@id"]}`, { method: "delete" });
 			} catch (error) {
+				alert("Error when delete element");
 				console.error(error);
 			}
 		}
@@ -23,53 +24,33 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 		<div>
 			<h1>Edit {book["@id"]}</h1>
 			<Formik
-				initialValues={{
-					isbn: book.isbn,
-					title: book.title,
-					description: book.description,
-					author: book.author,
-					publicationDate: book.publicationDate,
-					reviews: book.reviews,
-				}}
-				// TODO voir si pertinent de laisser la validation ?
+				initialValues={{ ...book }}
 				validate={(values) => {
 					const errors = {};
-					if (!values.isbn) {
-						errors.isbn = "Required";
-					}
-					if (!values.title) {
-						errors.title = "Required";
-					}
-					if (!values.description) {
-						errors.description = "Required";
-					}
-					if (!values.author) {
-						errors.author = "Required";
-					}
-					if (!values.publicationDate) {
-						errors.publicationDate = "Required";
-					}
-					if (!values.reviews) {
-						errors.reviews = "Required";
-					}
-					return errors;
+					//set your validation logic here
 				}}
-				onSubmit={(values, { setSubmitting }) => {
+				onSubmit={(values, { setSubmitting, setStatus }) => {
 					try {
 						fetch(`${book["@id"]}`, {
 							method: "put",
 							body: JSON.stringify(values),
 						});
+						setStatus({
+							edited: true,
+							msg: "Element edited",
+						});
 					} catch (error) {
-						console.error(error);
+						setStatus({
+							edited: false,
+							msg: `Error ${error}`,
+						});
 					}
 					setSubmitting(false);
 				}}
 			>
 				{({
 					values,
-					errors,
-					touched,
+					status,
 					handleChange,
 					handleBlur,
 					handleSubmit,
@@ -85,9 +66,10 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.isbn}
+								required
 							/>
-							{errors.isbn && touched.isbn && errors.isbn}
 						</div>
+						{/* {errors.isbn && touched.isbn && errors.isbn} */}
 						<div className='form-group'>
 							<label>title</label>
 							<input
@@ -97,9 +79,10 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.title}
+								required
 							/>
-							{errors.title && touched.title && errors.title}
 						</div>
+						{/* {errors.title && touched.title && errors.title} */}
 						<div className='form-group'>
 							<label>description</label>
 							<input
@@ -109,9 +92,10 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.description}
+								required
 							/>
-							{errors.description && touched.description && errors.description}
 						</div>
+						{/* {errors.description && touched.description && errors.description} */}
 						<div className='form-group'>
 							<label>author</label>
 							<input
@@ -121,9 +105,10 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.author}
+								required
 							/>
-							{errors.author && touched.author && errors.author}
 						</div>
+						{/* {errors.author && touched.author && errors.author} */}
 						<div className='form-group'>
 							<label>publicationDate</label>
 							<input
@@ -133,11 +118,10 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.publicationDate}
+								required
 							/>
-							{errors.publicationDate &&
-								touched.publicationDate &&
-								errors.publicationDate}
 						</div>
+						{/* {errors.publicationDate && touched.publicationDate && errors.publicationDate} */}
 						<div className='form-group'>
 							<label>reviews</label>
 							<input
@@ -147,9 +131,21 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.reviews}
+								required
 							/>
-							{errors.reviews && touched.reviews && errors.reviews}
 						</div>
+						{/* {errors.reviews && touched.reviews && errors.reviews} */}
+
+						{status && status.msg && (
+							<div
+								className={`alert ${
+									status.edited ? "alert-success" : "alert-danger"
+								}`}
+								role='alert'
+							>
+								{status.msg}
+							</div>
+						)}
 
 						<button
 							type='submit'

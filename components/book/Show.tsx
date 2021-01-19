@@ -7,23 +7,16 @@ interface Props {
 }
 
 export const Show: FunctionComponent<Props> = ({ book }) => {
-
 	const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this item ?")) {
 			try {
 				fetch(`${book["@id"]}`, { method: "delete" });
 			} catch (error) {
+				alert("error when delete element");
 				console.error(error);
 			}
 		}
 	};
-
-	const reviewsArray = book["reviews"].map((review, index) => (
-		<a href={`${review}`} key={index}>
-			{review}
-			<br />
-		</a>
-	));
 
 	return (
 		<div>
@@ -59,7 +52,16 @@ export const Show: FunctionComponent<Props> = ({ book }) => {
 					<tr>
 						<th scope='row'>reviews</th>
 						<td>
-							<ul>{reviewsArray}</ul>
+							<ul>
+								{book["reviews"].map((review, index) => (
+									<li>
+										<a href={`${review}`} key={index}>
+											{review}
+											<br />
+										</a>
+									</li>
+								))}
+							</ul>
 						</td>
 					</tr>
 				</tbody>
