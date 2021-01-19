@@ -1,5 +1,5 @@
-import { FunctionComponent } from "react";
-import { ListItem } from "./ListItem";
+import React, { FunctionComponent } from "react";
+import { ReferenceLinks } from "../common/ReferenceLinks";
 import { Book } from "../../interfaces/Book";
 import Link from "next/link";
 
@@ -29,7 +29,44 @@ export const List: FunctionComponent<Props> = ({ books }) => (
 			<tbody>
 				{books &&
 					books.length !== 0 &&
-					books.map((book) => <ListItem key={book["@id"]} book={book} />)}
+					books.map((book) => (
+						<tr key={book["@id"]}>
+							<th scope='row'>
+								<ReferenceLinks items={book["@id"]} type='book' />
+							</th>
+							<td>{book["isbn"]}</td>
+							<td>{book["title"]}</td>
+							<td>{book["description"]}</td>
+							<td>{book["author"]}</td>
+							<td>{book["publicationDate"]}</td>
+							<td>
+								<ul>
+									{book["reviews"].map((review, index) => (
+										<li>
+											<a href={`${review}`} key={index}>
+												{review}
+												<br />
+											</a>
+										</li>
+									))}
+								</ul>
+							</td>
+							<td>
+								<ReferenceLinks
+									items={book["@id"]}
+									type='book'
+									useIcon={true}
+								/>
+								<br />
+								<Link href={`${book["@id"]}/edit`}>
+									<a>
+										<span className='fa fa-pencil' aria-hidden='true' />
+										<span className='sr-only'>Edit</span>
+									</a>
+								</Link>
+							</td>
+						</tr>
+					))}
 			</tbody>
 		</table>
 	</div>

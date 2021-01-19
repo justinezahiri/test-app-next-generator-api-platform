@@ -5,37 +5,45 @@ import { Book } from "../../interfaces/Book";
 import Link from "next/link";
 
 interface Props {
-	book: Book;
+	book?: Book;
 }
 
 export const Form: FunctionComponent<Props> = ({ book }) => {
-	const handleDelete = () => {
+
+  const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this item ?")) {
 			try {
 				fetch(`${book["@id"]}`, { method: "delete" });
 			} catch (error) {
-				alert("Error when delete element");
+				alert("error when delete element");
 				console.error(error);
 			}
 		}
 	};
 
-	const defaultValues = book["@id"]
-		? {
-				isbn: "",
-				title: "",
-				description: "",
-				author: "",
-				publicationDate: "",
-				reviews: "",
-		  }
-		: { ...book };
+	const defaultValues = () => {
+    console.log("book", book)
+    if (book["@id"] !== undefined) {
+      return
+      ({ ...book })
+    }
+    else {
+      return ({
+        isbn: "",
+        title: "",
+        description: "",
+        author: "",
+        publicationDate: "",
+        reviews: "",
+      })
+    }
+  }
 
 	return (
 		<div>
 			{book["@id"] ? <h1>Edit {book["@id"]}</h1> : <h1>Create</h1>}
 			<Formik
-				initialValues={defaultValues}
+				initialValues={defaultValues()}
 				validate={(values) => {
 					const errors = {};
 					//set your validation logic here
@@ -174,6 +182,8 @@ export const Form: FunctionComponent<Props> = ({ book }) => {
 								{status.msg}
 							</div>
 						)}
+
+              {/* { error && <div className="alert">{error}</div> } */}
 
 						<button
 							type='submit'

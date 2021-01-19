@@ -8,7 +8,7 @@ interface Props {
   collection: PagedCollection<Book>;
 }
 
-const Page: NextComponentType<NextPageContext, Props, Props> = ({collection}) => (
+const Page: NextComponentType<NextPageContext, Props, Props> = ({ collection }) => (
   <List books={collection['hydra:member']}/>
 );
 

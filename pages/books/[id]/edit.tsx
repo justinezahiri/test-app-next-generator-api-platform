@@ -2,6 +2,7 @@ import { NextComponentType, NextPageContext } from 'next';
 import { Update } from '../../../components/book/Update';
 import { Book } from '../../../interfaces/Book';
 import { fetch } from '../../../utils/dataAccess';
+import {Form} from '../../../components/book/Form'
 
 interface Props {
   book: Book;
@@ -10,7 +11,7 @@ interface Props {
 const Page: NextComponentType<NextPageContext, Props, Props> = ({ book }) => {
 
   return (
-    <Update book={ book }/>
+    <Form book={ book }/>
   );
 };
 

@@ -8,7 +8,6 @@ interface Props {
 };
 
 const Page: NextComponentType<NextPageContext, Props, Props> = ({ book }) => {
-  console.log("book", book)
   return (
     <Show book={ book }/>
   );

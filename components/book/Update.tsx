@@ -1,5 +1,4 @@
-import React from "react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { Formik } from "formik";
 import { Book } from "../../interfaces/Book";
 import Link from "next/link";
@@ -9,12 +8,14 @@ interface Props {
 }
 
 export const Update: FunctionComponent<Props> = ({ book }) => {
+	const [error, setError] = useState(null);
+
 	const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this item ?")) {
 			try {
 				fetch(`${book["@id"]}`, { method: "delete" });
 			} catch (error) {
-				alert("Error when delete element");
+				setError(error);
 				console.error(error);
 			}
 		}
@@ -144,6 +145,12 @@ export const Update: FunctionComponent<Props> = ({ book }) => {
 								role='alert'
 							>
 								{status.msg}
+							</div>
+						)}
+
+						{error && (
+							<div className='alert alert-danger' role='alert'>
+								{error}
 							</div>
 						)}
 

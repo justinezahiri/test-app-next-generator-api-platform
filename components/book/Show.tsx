@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
 import { Book } from "../../interfaces/Book";
 
@@ -7,12 +7,14 @@ interface Props {
 }
 
 export const Show: FunctionComponent<Props> = ({ book }) => {
+	const [error, setError] = useState(null);
+
 	const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this item ?")) {
 			try {
 				fetch(`${book["@id"]}`, { method: "delete" });
 			} catch (error) {
-				alert("error when delete element");
+				setError(error);
 				console.error(error);
 			}
 		}
@@ -66,6 +68,11 @@ export const Show: FunctionComponent<Props> = ({ book }) => {
 					</tr>
 				</tbody>
 			</table>
+			{error && (
+				<div className='alert alert-danger' role='alert'>
+					{error}
+				</div>
+			)}
 			<Link href='/books'>
 				<a className='btn btn-primary'>Back to list</a>
 			</Link>
