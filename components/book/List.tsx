@@ -42,8 +42,8 @@ export const List: FunctionComponent<Props> = ({ books }) => (
 							<td>
 								<ul>
 									{book["reviews"].map((review, index) => (
-										<li>
-											<a href={`${review}`} key={index}>
+										<li key={index}>
+											<a href={`${review}`}>
 												{review}
 												<br />
 											</a>

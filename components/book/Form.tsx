@@ -1,5 +1,4 @@
-import React from "react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { Formik } from "formik";
 import { Book } from "../../interfaces/Book";
 import Link from "next/link";
@@ -9,39 +8,37 @@ interface Props {
 }
 
 export const Form: FunctionComponent<Props> = ({ book }) => {
+	const [error, setError] = useState(null);
 
-  const handleDelete = () => {
+	const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this item ?")) {
 			try {
-				fetch(`${book["@id"]}`, { method: "delete" });
+				fetch(`${book["@id"]}`, { method: "DELETE" });
 			} catch (error) {
-				alert("error when delete element");
+				setError("Error when deleting the resource.");
 				console.error(error);
 			}
 		}
 	};
 
 	const defaultValues = () => {
-    console.log("book", book)
-    if (book["@id"] !== undefined) {
-      return
-      ({ ...book })
-    }
-    else {
-      return ({
-        isbn: "",
-        title: "",
-        description: "",
-        author: "",
-        publicationDate: "",
-        reviews: "",
-      })
-    }
-  }
+		if (book) {
+			return { ...book };
+		} else {
+			return {
+				isbn: "",
+				title: "",
+				description: "",
+				author: "",
+				publicationDate: "",
+				reviews: "",
+			};
+		}
+	};
 
 	return (
 		<div>
-			{book["@id"] ? <h1>Edit {book["@id"]}</h1> : <h1>Create</h1>}
+			{book ? <h1>Edit {book["@id"]}</h1> : <h1>Create</h1>}
 			<Formik
 				initialValues={defaultValues()}
 				validate={(values) => {
@@ -183,7 +180,11 @@ export const Form: FunctionComponent<Props> = ({ book }) => {
 							</div>
 						)}
 
-              {/* { error && <div className="alert">{error}</div> } */}
+						{error && (
+							<div className='alert alert-danger' role='alert'>
+								{setError}
+							</div>
+						)}
 
 						<button
 							type='submit'
@@ -198,7 +199,7 @@ export const Form: FunctionComponent<Props> = ({ book }) => {
 			<Link href='/books'>
 				<a className='btn btn-primary'>Back to list</a>
 			</Link>
-			{book["@id"] && (
+			{book && (
 				<button className='btn btn-danger' onClick={handleDelete}>
 					<a>Delete</a>
 				</button>

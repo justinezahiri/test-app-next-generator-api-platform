@@ -1,22 +1,20 @@
-import { NextComponentType, NextPageContext } from 'next';
-import { Show } from '../../../components/book/Show';
-import { Book } from '../../../interfaces/Book';
-import { fetch } from '../../../utils/dataAccess';
+import { NextComponentType, NextPageContext } from "next";
+import { Show } from "../../../components/book/Show";
+import { Book } from "../../../interfaces/Book";
+import { fetch } from "../../../utils/dataAccess";
 
 interface Props {
-  book: Book;
-};
+	book: Book;
+}
 
 const Page: NextComponentType<NextPageContext, Props, Props> = ({ book }) => {
-  return (
-    <Show book={ book }/>
-  );
+	return <Show book={book} />;
 };
 
 Page.getInitialProps = async ({ asPath }: NextPageContext) => {
-  const book = await fetch(asPath);
+	const book = await fetch(asPath);
 
-  return { book };
+	return { book };
 };
 
 export default Page;

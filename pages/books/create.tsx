@@ -1,8 +1,6 @@
-import { NextComponentType, NextPageContext } from 'next';
-import { Create } from '../../components/book/Create';
+import { NextComponentType, NextPageContext } from "next";
+import { Form } from "../../components/book/Form";
 
-const Page: NextComponentType<NextPageContext> = () => (
-  <Create />
-);
+const Page: NextComponentType<NextPageContext> = () => <Form />;
 
 export default Page;

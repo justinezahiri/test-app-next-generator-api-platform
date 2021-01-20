@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import Link from "next/link";
 import { Book } from "../../interfaces/Book";
 
@@ -12,9 +12,9 @@ export const Show: FunctionComponent<Props> = ({ book }) => {
 	const handleDelete = () => {
 		if (window.confirm("Are you sure you want to delete this item ?")) {
 			try {
-				fetch(`${book["@id"]}`, { method: "delete" });
+				fetch(`${book["@id"]}`, { method: "DELETE" });
 			} catch (error) {
-				setError(error);
+				setError("Error when deleting the resource.");
 				console.error(error);
 			}
 		}
@@ -56,8 +56,8 @@ export const Show: FunctionComponent<Props> = ({ book }) => {
 						<td>
 							<ul>
 								{book["reviews"].map((review, index) => (
-									<li>
-										<a href={`${review}`} key={index}>
+									<li key={index}>
+										<a href={`${review}`}>
 											{review}
 											<br />
 										</a>
